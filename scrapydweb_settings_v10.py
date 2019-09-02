@@ -22,7 +22,7 @@ SCRAPYDWEB_PORT = 5000
 ENABLE_AUTH = True
 # In order to enable basic auth, both USERNAME and PASSWORD should be non-empty strings.
 USERNAME = 'admin'
-PASSWORD = '123'
+PASSWORD = '123456'
 
 # Make sure that [Scrapyd](https://github.com/scrapy/scrapyd) has been installed
 # and started on all of your hosts.
@@ -44,9 +44,8 @@ PASSWORD = '123'
 #   - it's recommended to pass in a tuple of 5 elements.
 #   - e.g. ('', '', '127.0.0.1', '6800', '') or ('username', 'password', 'localhost', '6801', 'group')
 SCRAPYD_SERVERS = [
-    '39.106.189.108:6800',
     # 'username:password@localhost:6801#group',
-    # ('root', '123456', '39.106.189.108', '6800', 'aly'),
+    ('admin', '123456', '39.106.189.108', '6800', 'gxr')
 ]
 
 # It's recommended to update the three options below
@@ -58,20 +57,20 @@ SCRAPYD_SERVERS = [
 # ScrapydWeb would try to directly read Scrapy logfiles from disk, instead of making a request
 # to the Scrapyd server.
 # e.g. '127.0.0.1:6800' or 'localhost:6801', do not forget the port number.
-LOCAL_SCRAPYD_SERVER = ''
+LOCAL_SCRAPYD_SERVER = '127.0.0.1:6800'
 
 # Enter the directory when you run Scrapyd, run the command below
 # to find out where the Scrapy logs are stored:
 # python -c "from os.path import abspath, isdir; from scrapyd.config import Config; path = abspath(Config().get('logs_dir')); print(path); print(isdir(path))"
 # Check out https://scrapyd.readthedocs.io/en/stable/config.html#logs-dir for more info.
 # e.g. 'C:/Users/username/logs' or '/home/username/logs'
-LOCAL_SCRAPYD_LOGS_DIR = ''
+LOCAL_SCRAPYD_LOGS_DIR = '/data/spider/scrapyd_deploy/logs'
 
 # The default is False, set it to True to automatically run LogParser as a subprocess at startup.
 # Note that you can run the LogParser service separately via command 'logparser' as you like.
 # Run 'logparser -h' to find out the config file of LogParser for more advanced settings.
 # Visit https://github.com/my8100/logparser for more info.
-ENABLE_LOGPARSER = False
+ENABLE_LOGPARSER = True
 ############################## QUICK SETUP end ################################
 ############################## 快速设置 结束 ###################################
 
@@ -91,7 +90,7 @@ PRIVATEKEY_FILEPATH = ''
 # ScrapydWeb is able to locate projects in the SCRAPY_PROJECTS_DIR,
 # so that you can simply select a project to deploy, instead of packaging it in advance.
 # e.g. 'C:/Users/username/myprojects' or '/home/username/myprojects'
-SCRAPY_PROJECTS_DIR = '/srv/scrapy_project'
+SCRAPY_PROJECTS_DIR = '/data/spider/scrapy_project'
 
 ############################## Scrapyd ########################################
 # ScrapydWeb would try every extension in sequence to locate the Scrapy logfile.
@@ -121,7 +120,7 @@ SCHEDULE_EXPAND_SETTINGS_ARGUMENTS = False
 
 # The default is 'Mozilla/5.0', set it a non-empty string to customize the default value of `custom`
 # in the drop-down list of `USER_AGENT`.
-SCHEDULE_CUSTOM_USER_AGENT = 'Mozilla/5.0'
+SCHEDULE_CUSTOM_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36'
 
 # The default is None, set it to any value of ['custom', 'Chrome', 'iPhone', 'iPad', 'Android']
 # to customize the default value of `USER_AGENT`.
@@ -204,7 +203,7 @@ TELEGRAM_CHAT_ID = int(os.environ.get('TELEGRAM_CHAT_ID', 0))
 
 ########## email ##########
 # The default subject to use when sending text via email.
-EMAIL_SUBJECT = 'Email from #scrapydweb'
+EMAIL_SUBJECT = 'Email from scrapydweb(数据抓取服务器:47.95.214.223)'
 
 ########## email sender & recipients ##########
 # Leave this option as '' to default to the EMAIL_SENDER option below; Otherwise, set it up
@@ -239,7 +238,7 @@ SMTP_CONNECTION_TIMEOUT = 30
 
 ############################## Monitor & Alert ################################
 # The default is False, set it to True to launch the poll subprocess to monitor your crawling jobs.
-ENABLE_MONITOR = False
+ENABLE_MONITOR = True
 
 ########## poll interval ##########
 # Tip: In order to be notified (and stop or forcestop a job when triggered) in time,
@@ -259,16 +258,16 @@ POLL_REQUEST_INTERVAL = 10
 # You have to set up your accounts in the "Send text" section above first.
 ENABLE_SLACK_ALERT = False
 ENABLE_TELEGRAM_ALERT = False
-ENABLE_EMAIL_ALERT = False
+ENABLE_EMAIL_ALERT = True
 
 ########## alert working time ##########
 # Monday is 1 and Sunday is 7.
 # e.g, [1, 2, 3, 4, 5, 6, 7]
-ALERT_WORKING_DAYS = [1, 2, 3, 4, 5, 6, 7]
+ALERT_WORKING_DAYS = list(range(1, 8))
 
 # From 0 to 23.
 # e.g. [9] + list(range(15, 18)) >>> [9, 15, 16, 17], or range(24) for 24 hours
-ALERT_WORKING_HOURS = [9, 11, 14, 17, 22]
+ALERT_WORKING_HOURS = list(range(24))
 
 ########## basic triggers ##########
 # Trigger alert every N seconds for each running job.
@@ -296,16 +295,16 @@ ON_JOB_FINISHED = True
 # Note that the 'STOP' action and the 'FORCESTOP' action would still be executed even when the current time
 # is NOT within the ALERT_WORKING_DAYS and the ALERT_WORKING_HOURS, though no alert would be sent.
 
-LOG_CRITICAL_THRESHOLD = 1
-LOG_CRITICAL_TRIGGER_STOP = True
+LOG_CRITICAL_THRESHOLD = 0
+LOG_CRITICAL_TRIGGER_STOP = False
 LOG_CRITICAL_TRIGGER_FORCESTOP = False
 
-LOG_ERROR_THRESHOLD = 1
-LOG_ERROR_TRIGGER_STOP = True
+LOG_ERROR_THRESHOLD = 0
+LOG_ERROR_TRIGGER_STOP = False
 LOG_ERROR_TRIGGER_FORCESTOP = False
 
-LOG_WARNING_THRESHOLD = 1
-LOG_WARNING_TRIGGER_STOP = True
+LOG_WARNING_THRESHOLD = 0
+LOG_WARNING_TRIGGER_STOP = False
 LOG_WARNING_TRIGGER_FORCESTOP = False
 
 LOG_REDIRECT_THRESHOLD = 0

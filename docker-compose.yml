@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+
+  scrapydweb:
+    container_name: scrapydweb
+    build: .
+    restart: always
+    ports:
+      - "6800:6800"
